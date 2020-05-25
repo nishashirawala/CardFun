@@ -3,17 +3,9 @@
     <string name="shuffle_btn">Shuffle</string>
     <string name="show_btn">Show</string>
 
-    <string name="p1c0">card0</string>
-    <string name="p1c1">card1</string>
-    <string name="p1c2">card2</string>
-    <string name="p1c3">card3</string>
-    <string name="p1c4">card4</string>
-
-    <string name="p2c0">card0</string>
-    <string name="p2c1">card1</string>
-    <string name="p2c2">card2</string>
-    <string name="p2c3">card3</string>
-    <string name="p2c4">card4</string>
+    <string name="blank_card">blank_card</string>
+    <string name="p1card">player1_card_tag</string>
+    <string name="p2card">player2_card_tag</string>
 
 
 </resources>

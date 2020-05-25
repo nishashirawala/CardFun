@@ -68,12 +68,10 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/shuffle_btn"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_below="@id/player2layout"
-        android:layout_marginTop="189dp"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/shuffle_btn"
         android:text="@string/shuffle_btn" />
 
     <ImageView
@@ -82,6 +80,15 @@
         android:layout_centerVertical="true"
         android:id="@+id/usedCardPlayer1"
         android:src="@drawable/red_back"
+        android:scaleType="centerInside"/>
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="150dp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/deck"
+        android:src="@drawable/blue_back"
         android:scaleType="centerInside"/>
 
     <ImageView
@@ -97,15 +104,14 @@
         android:id="@+id/show_btn"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_below="@id/shuffle_btn"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="98dp"
+        android:layout_above="@+id/player1layout"
+        android:layout_centerVertical="true"
         android:text="@string/show_btn" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:id="@+id/fiveCardsLayout"
+        android:id="@+id/player1layout"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:orientation="horizontal"
