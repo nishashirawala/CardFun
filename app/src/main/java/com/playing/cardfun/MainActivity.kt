@@ -1,5 +1,6 @@
 package com.playing.cardfun
 
+import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
@@ -39,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         player2card4.setOnClickListener{ player2CardClicked(player2card4, R.string.p2card) }
 
         deck.setOnClickListener {
-            print("deck clicked " + player1Played +  "  " + player2Played)
+            println("deck clicked $player1Played  $player2Played")
             cards.shuffle()
             val newCard = cards.get(0)
             if(player1Played) {
@@ -72,41 +73,40 @@ class MainActivity : AppCompatActivity() {
         usedCardPlayer1.setOnClickListener {
             val newCard: Card = usedCardPlayer1.getTag(R.string.p1card) as Card
 
-            if(player1Played) {
+            if (player2Played) {
                 grayCard.setImageResource(newCard.imageId)
-                grayCard.setTag(R.string.p1card, newCard)
-
-                player1Cards.add(newCard)
-                usedCardPlayer1.setImageResource(R.drawable.red_back)
-                usedCardPlayer1.setTag(R.string.p1card, null)
-                player1Played = false
-            } else if (player2Played) {
-                grayCard.setImageResource(newCard.imageId)
-                grayCard.setTag(R.string.p1card, newCard)
-
+                grayCard.setTag(R.string.p2card, newCard)
                 player2Cards.add(newCard)
                 usedCardPlayer1.setImageResource(R.drawable.red_back)
-                usedCardPlayer1.setTag(R.string.p2card, null)
+                usedCardPlayer1.setTag(R.string.p1card, null)
                 player2Played = false
+                setPlayerEnabled("player2", false)
+                setPlayerEnabled("player1", true)
             }
         }
 
         usedCardPlayer2.setOnClickListener {
             val newCard: Card = usedCardPlayer2.getTag(R.string.p2card) as Card
 
-            grayCard.setImageResource(newCard.imageId)
-            grayCard.setTag(R.string.p2card, newCard)
-
             if(player1Played) {
+                grayCard.setImageResource(newCard.imageId)
+                grayCard.setTag(R.string.p1card, newCard)
                 player1Cards.add(newCard)
                 usedCardPlayer2.setImageResource(R.drawable.red_back)
-                usedCardPlayer2.setTag(R.string.p1card, null)
-            } else if (player2Played) {
-                player2Cards.add(newCard)
-                usedCardPlayer2.setImageResource(R.drawable.red_back)
                 usedCardPlayer2.setTag(R.string.p2card, null)
+                player1Played = false
+                setPlayerEnabled("player1", false)
+                setPlayerEnabled("player2", true)
             }
         }
+    }
+
+    private fun usedCardClick(cardImage: ImageView, card: Card, tag: Int) {
+        grayCard.setImageResource(card.imageId)
+        grayCard.setTag(tag, card)
+
+        cardImage.setImageResource(R.drawable.red_back)
+        cardImage.setTag(R.string.p1card, null)
     }
 
     private fun setPlayerEnabled(playerStr: String, isEnabled: Boolean) {
@@ -119,35 +119,39 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun player1CardClicked(playerCard: ImageView, tag: Int) {
+        println("player1CardClicked" + playerCard.getTag(tag) + " " + player1Played)
+        println("gray back tag " + R.drawable.gray_back)
         if(playerCard.getTag(tag) != R.drawable.gray_back && !player1Played) {
             player2Played = false
             player1Played = true
             player1Cards.remove(playerCard.getTag(tag))
 
-            grayCard = playerCard
-            usedCardPlayer1.setImageDrawable(playerCard.drawable)
-            usedCardPlayer1.setTag(tag, playerCard.getTag(tag) as Card)
-
-            playerCard.setImageResource(R.drawable.gray_back)
-            playerCard.setTag(tag, R.drawable.gray_back)
-            grayCard.setTag(tag, R.drawable.gray_back)
+            handlePlayerCardClick(playerCard, tag, usedCardPlayer1)
         }
     }
 
     private fun player2CardClicked(playerCard: ImageView, tag: Int) {
+        println("player2CardClicked" + playerCard.getTag(tag) + " " + player1Played)
+        println("gray back tag " + R.drawable.gray_back)
         if(playerCard.getTag(tag) != R.drawable.gray_back && !player2Played) {
             player1Played = false
             player2Played = true
             player2Cards.remove(playerCard.getTag(tag))
 
-            grayCard = playerCard
-            usedCardPlayer2.setImageDrawable(playerCard.drawable)
-            usedCardPlayer2.setTag(tag, playerCard.getTag(tag) as Card)
-
-            playerCard.setImageResource(R.drawable.gray_back)
-            playerCard.setTag(tag, R.drawable.gray_back)
-            grayCard.setTag(tag, R.drawable.gray_back)
+            handlePlayerCardClick(playerCard, tag, usedCardPlayer2)
         }
+    }
+
+    private fun handlePlayerCardClick(playerCard: ImageView, tag: Int, usedCard: ImageView) {
+
+        grayCard = playerCard
+        usedCard.setImageDrawable(playerCard.drawable)
+        usedCard.setTag(tag, playerCard.getTag(tag) as Card)
+
+        playerCard.setImageResource(R.drawable.gray_back)
+        playerCard.setTag(tag, R.drawable.gray_back)
+        grayCard.setTag(tag, R.drawable.gray_back)
+
     }
 
     private fun createCardList() : ArrayList<Card> {
