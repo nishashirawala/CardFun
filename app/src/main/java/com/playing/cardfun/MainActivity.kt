@@ -72,14 +72,8 @@ class MainActivity : AppCompatActivity() {
 
         usedCardPlayer1.setOnClickListener {
             val newCard: Card = usedCardPlayer1.getTag(R.string.p1card) as Card
-
             if (player2Played) {
-                grayCard.setImageResource(newCard.imageId)
-                grayCard.setTag(R.string.p2card, newCard)
-                player2Cards.add(newCard)
-                usedCardPlayer1.setImageResource(R.drawable.red_back)
-                usedCardPlayer1.setTag(R.string.p1card, null)
-                player2Played = false
+                usedCardClick(usedCardPlayer1, newCard, R.string.p2card, R.string.p1card)
                 setPlayerEnabled("player2", false)
                 setPlayerEnabled("player1", true)
             }
@@ -87,26 +81,27 @@ class MainActivity : AppCompatActivity() {
 
         usedCardPlayer2.setOnClickListener {
             val newCard: Card = usedCardPlayer2.getTag(R.string.p2card) as Card
-
             if(player1Played) {
-                grayCard.setImageResource(newCard.imageId)
-                grayCard.setTag(R.string.p1card, newCard)
-                player1Cards.add(newCard)
-                usedCardPlayer2.setImageResource(R.drawable.red_back)
-                usedCardPlayer2.setTag(R.string.p2card, null)
-                player1Played = false
+                usedCardClick(usedCardPlayer2, newCard, R.string.p1card, R.string.p2card)
                 setPlayerEnabled("player1", false)
                 setPlayerEnabled("player2", true)
             }
         }
     }
 
-    private fun usedCardClick(cardImage: ImageView, card: Card, tag: Int) {
+    private fun usedCardClick(cardImage: ImageView, card: Card, tagForGrayCard: Int, tagForUsedCard: Int) {
         grayCard.setImageResource(card.imageId)
-        grayCard.setTag(tag, card)
+        grayCard.setTag(tagForGrayCard, card)
 
+        if (tagForGrayCard == R.string.p2card) {
+            player2Cards.add(card)
+            player2Played = false
+        } else {
+            player1Cards.add(card)
+            player1Played = false
+        }
         cardImage.setImageResource(R.drawable.red_back)
-        cardImage.setTag(R.string.p1card, null)
+        cardImage.setTag(tagForUsedCard, null)
     }
 
     private fun setPlayerEnabled(playerStr: String, isEnabled: Boolean) {
@@ -122,8 +117,8 @@ class MainActivity : AppCompatActivity() {
         println("player1CardClicked" + playerCard.getTag(tag) + " " + player1Played)
         println("gray back tag " + R.drawable.gray_back)
         if(playerCard.getTag(tag) != R.drawable.gray_back && !player1Played) {
-            player2Played = false
             player1Played = true
+            player2Played = false
             player1Cards.remove(playerCard.getTag(tag))
 
             handlePlayerCardClick(playerCard, tag, usedCardPlayer1)
@@ -143,7 +138,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handlePlayerCardClick(playerCard: ImageView, tag: Int, usedCard: ImageView) {
-
         grayCard = playerCard
         usedCard.setImageDrawable(playerCard.drawable)
         usedCard.setTag(tag, playerCard.getTag(tag) as Card)
@@ -177,7 +171,17 @@ class MainActivity : AppCompatActivity() {
         cardList.add(Card("heart_jack", 10, R.drawable.heart_jack))
         cardList.add(Card("spade_jack", 10, R.drawable.spade_jack))
 
-        cardList.add(Card("club_10", 10, R.drawable.club10))
+
+        for(x in 2.. 10) {
+            // val identifier : Int = resources.getIdentifier("club$x", "drawable", packageName)
+            cardList.add(Card("club_$x", x, resources.getIdentifier("club$x", "drawable", packageName)))
+            cardList.add(Card("diamond_$x", x, resources.getIdentifier("club$x", "drawable", packageName)))
+            cardList.add(Card("heart_$x", x, resources.getIdentifier("club$x", "drawable", packageName)))
+            cardList.add(Card("spade_$x", x, resources.getIdentifier("club$x", "drawable", packageName)))
+        }
+
+
+        /*cardList.add(Card("club_10", 10, R.drawable.club10))
         cardList.add(Card("diamond_10", 10, R.drawable.diamond10))
         cardList.add(Card("heart_10", 10, R.drawable.heart10))
         cardList.add(Card("spade_10", 10, R.drawable.spade10))
@@ -196,7 +200,6 @@ class MainActivity : AppCompatActivity() {
         cardList.add(Card("diamond_7", 7, R.drawable.diamond7))
         cardList.add(Card("heart_7", 7, R.drawable.heart7))
         cardList.add(Card("spade_7", 7, R.drawable.spade7))
-
 
         cardList.add(Card("club_6", 6, R.drawable.club6))
         cardList.add(Card("diamond_6", 6, R.drawable.diamond6))
@@ -226,8 +229,9 @@ class MainActivity : AppCompatActivity() {
         cardList.add(Card("club_2", 2, R.drawable.club2))
         cardList.add(Card("diamond_2", 2, R.drawable.diamond2))
         cardList.add(Card("heart_2", 2, R.drawable.heart2))
-        cardList.add(Card("spade_2", 2, R.drawable.spade2))
+        cardList.add(Card("spade_2", 2, R.drawable.spade2))*/
 
+        println(cardList.size)
         cardList.shuffle()
 
         return cardList
